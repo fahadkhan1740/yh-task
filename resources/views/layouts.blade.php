@@ -48,8 +48,8 @@
                     <div class="hidden sm:block sm:ml-6">
                         <div class="flex space-x-4">
                             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                            <a href="{{ route('stats') }}" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">Stats</a>
-                            <a href="{{ route('maps') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Maps</a>
+                            <a href="{{ route('stats') }}" class="@if(request()->route()->getName() === 'stats') bg-gray-900 @endif text-white px-3 py-2 rounded-md text-sm font-medium">Stats</a>
+                            <a href="{{ route('maps') }}" class="@if(request()->route()->getName() === 'maps') bg-gray-900 @endif text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Maps</a>
                         </div>
                     </div>
                 </div>
@@ -64,10 +64,10 @@
         <div class="hidden sm:hidden">
             <div class="px-2 pt-2 pb-3 space-y-1">
                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                <a href="{{ route('stats') }}" class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium">
+                <a href="{{ route('stats') }}" class="@if(request()->route()->getName() === 'stats') bg-gray-900 @endif text-white block px-3 py-2 rounded-md text-base font-medium">
                     Stats
                 </a>
-                <a href="{{ route('maps') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Maps</a>
+                <a href="{{ route('maps') }}" class="@if(request()->route()->getName() === 'maps') bg-gray-900 @endif text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Maps</a>
             </div>
         </div>
     </nav>
