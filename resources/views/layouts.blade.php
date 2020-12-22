@@ -78,4 +78,19 @@
 </div>
 </body>
 <script src="{{ asset('js/app.js') }}"></script>
+<script type="text/javascript">
+    window.checkAndAttachMapScript = function (callback) {
+        if (!!window.google) {  // If you're using vue cli, then directly checking
+            // 'google' obj will throw an error at the time of transpiling.
+            callback();
+            return true;
+        }
+
+        window.mapApiInitialized = callback;
+        let script = document.createElement('script');
+        script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCXQRkRD6kfFvZvjemcqZ85G9VWBGowM_I';
+        document.body.appendChild(script);
+    }
+
+</script>
 </html>

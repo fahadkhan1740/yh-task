@@ -1,42 +1,73 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
+            <div class="grid grid-cols-3 gap-6">
+                <div class="col-span-3 sm:col-span-2">
+                    <label for="company_website" class="block text-sm font-medium text-gray-700">
+                        Search
+                    </label>
+                    <div class="mt-1 flex rounded-md shadow-sm">
+                        <input v-model="search" type="text" name="company_website" id="company_website" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300" placeholder="First or Last Name">
+                    </div>
+                </div>
+            </div>
+
+            <div class="hidden sm:block" aria-hidden="true">
+                <div class="py-5">
+                    <div class="border-t border-gray-200"></div>
+                </div>
+            </div>
+
             <!-- component -->
-            <div class="flex items-center min-h-screen bg-gray-200 text-gray-800">
-                <div class="p-4 w-full">
-                    <div class="grid grid-cols-12 gap-4">
-                        <div class="col-span-12 sm:col-span-6 md:col-span-3">
-                            <div class="flex flex-row bg-white shadow-sm rounded p-4">
-                                <div class="flex items-center justify-center flex-shrink-0 h-12 w-12 rounded-xl bg-blue-100 text-blue-500">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                                </div>
-                                <div class="flex flex-col flex-grow ml-4">
-                                    <div class="text-sm text-gray-500">Total</div>
-                                    <div class="font-bold text-lg">{{ totalCount }}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-span-12 sm:col-span-6 md:col-span-3">
-                            <div class="flex flex-row bg-white shadow-sm rounded p-4">
-                                <div class="flex items-center justify-center flex-shrink-0 h-12 w-12 rounded-xl bg-green-100 text-green-500">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                                </div>
-                                <div class="flex flex-col flex-grow ml-4">
-                                    <div class="text-sm text-gray-500">Male</div>
-                                    <div class="font-bold text-lg">{{ maleCount }}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-span-12 sm:col-span-6 md:col-span-3">
-                            <div class="flex flex-row bg-white shadow-sm rounded p-4">
-                                <div class="flex items-center justify-center flex-shrink-0 h-12 w-12 rounded-xl bg-orange-100 text-orange-500">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                                </div>
-                                <div class="flex flex-col flex-grow ml-4">
-                                    <div class="text-sm text-gray-500">Females</div>
-                                    <div class="font-bold text-lg">{{ femaleCount }}</div>
-                                </div>
-                            </div>
+            <!-- This example requires Tailwind CSS v2.0+ -->
+            <div class="flex flex-col">
+                <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                        <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        ID
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        First Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Last Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Gender
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Lat/Lon
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                <tr v-for="record in records" :key="record.id">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">{{ record.id }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">{{ record.first_name }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">{{ record.last_name }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                          {{ record.gender }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ record.lat }}/{{ record.lon }}
+                                    </td>
+                                </tr>
+
+                                <!-- More rows... -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -50,32 +81,48 @@
         data() {
             return {
                 records: '',
-                totalCount: 0,
-                maleCount: 0,
-                femaleCount: 0
+                search: ''
             }
         },
         mounted() {
-            console.log('Stats Component.');
+            console.log('Maps Component.');
             this.getRecords();
+        },
+        watch: {
+            search: function (oldValue, newValue) {
+                this.filterRecords(oldValue);
+            }
         },
         methods: {
             getRecords() {
                 axios.get('/api/records')
                     .then(res => {
                         this.records = res.data;
-
-                        this.totalCount = this.records.length;
-
-                        this.records.filter((record) => {
-                            if (record.gender === 'Male') {
-                                this.maleCount++;
-                            } else {
-                                this.femaleCount++;
-                            }
-                        })
                     })
                     .catch(err => console.error(err));
+            },
+            filterRecords(value) {
+
+                const filterItems = (arr, query) => {
+                    return arr.filter((el) => {
+                        if (el.first_name === undefined) {
+                            return false;
+                        }
+
+                        if (el.first_name.toString().toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+                            el.last_name.toString().toLowerCase().indexOf(query.toLowerCase()) !== -1
+                        ) {
+                            return true;
+                        }
+                    })
+                }
+
+                this.records = filterItems(this.records, this.search);
+
+                if (value === '') {
+                    this.getRecords();
+                }
+
             }
         }
     }
