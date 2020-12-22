@@ -9,6 +9,8 @@
 
     <title>Maps & Stats</title>
 
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXQRkRD6kfFvZvjemcqZ85G9VWBGowM_I">
+    </script>
 </head>
 <body>
 <div id="app">

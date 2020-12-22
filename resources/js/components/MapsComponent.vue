@@ -12,6 +12,10 @@
                 </div>
             </div>
 
+            <div id="map" style="position: initial; width: 100%; height: 480px">
+
+            </div>
+
             <div class="hidden sm:block" aria-hidden="true">
                 <div class="py-5">
                     <div class="border-t border-gray-200"></div>
@@ -81,12 +85,15 @@
         data() {
             return {
                 records: '',
-                search: ''
+                search: '',
+                map: null,
+                mapCenter: {lat: 27.948308, lng: 109.599191}
             }
         },
         mounted() {
             console.log('Maps Component.');
             this.getRecords();
+            this.initMap();
         },
         watch: {
             search: function (oldValue, newValue) {
@@ -94,6 +101,26 @@
             }
         },
         methods: {
+            initMap() {
+                setTimeout(() => {
+                    this.map = new google.maps.Map(document.getElementById('map'), {
+                        center: this.mapCenter,
+                        zoom: 15,
+                        maxZoom: 20,
+                        minZoom: 3,
+                        zoomControl: true
+                    })
+
+                    this.records.map((record) => {
+                        let marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(record.lat, record.lon),
+                            map: this.map
+                        });
+                    })
+
+
+                }, 2000)
+            },
             getRecords() {
                 axios.get('/api/records')
                     .then(res => {

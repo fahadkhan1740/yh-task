@@ -2019,16 +2019,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       records: '',
-      search: ''
+      search: '',
+      map: null,
+      mapCenter: {
+        lat: 27.948308,
+        lng: 109.599191
+      }
     };
   },
   mounted: function mounted() {
     console.log('Maps Component.');
     this.getRecords();
+    this.initMap();
   },
   watch: {
     search: function search(oldValue, newValue) {
@@ -2036,11 +2046,31 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    getRecords: function getRecords() {
+    initMap: function initMap() {
       var _this = this;
 
+      setTimeout(function () {
+        _this.map = new google.maps.Map(document.getElementById('map'), {
+          center: _this.mapCenter,
+          zoom: 15,
+          maxZoom: 20,
+          minZoom: 3,
+          zoomControl: true
+        });
+
+        _this.records.map(function (record) {
+          var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(record.lat, record.lon),
+            map: _this.map
+          });
+        });
+      }, 2000);
+    },
+    getRecords: function getRecords() {
+      var _this2 = this;
+
       axios.get('/api/records').then(function (res) {
-        _this.records = res.data;
+        _this2.records = res.data;
       })["catch"](function (err) {
         return console.error(err);
       });
@@ -37843,6 +37873,11 @@ var render = function() {
           ])
         ])
       ]),
+      _vm._v(" "),
+      _c("div", {
+        staticStyle: { position: "initial", width: "100%", height: "480px" },
+        attrs: { id: "map" }
+      }),
       _vm._v(" "),
       _vm._m(0),
       _vm._v(" "),
