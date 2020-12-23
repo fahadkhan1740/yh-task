@@ -7,15 +7,36 @@
                         Search
                     </label>
                     <div class="mt-1 flex rounded-md shadow-sm">
-                        <input v-model="search" type="text" name="company_website" id="company_website" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300" placeholder="First or Last Name">
+                        <input v-model="search" type="text" name="company_website" id="company_website"
+                               class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
+                               placeholder="First or Last Name">
                     </div>
                 </div>
             </div>
 
-            <div class="flex justify-center rounded-lg text-lg py-4" role="group">
-                <button @click="filterMarkersUsingGender('')" class="bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-r-0 border-blue-500 rounded-l-lg px-4 py-2 mx-0 outline-none focus:shadow-outline">All</button>
-                <button @click="filterMarkersUsingGender('Male')" class="bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-blue-500  px-4 py-2 mx-0 outline-none focus:shadow-outline">Male</button>
-                <button @click="filterMarkersUsingGender('Female')" class="bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-l-0 border-blue-500 rounded-r-lg px-4 py-2 mx-0 outline-none focus:shadow-outline">Female</button>
+            <div class="flex space-x-5">
+                <div class="flex justify-center rounded-lg text-lg py-4" role="group">
+                    <button @click="filterMarkersUsingGender('')"
+                            class="bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-r-0 border-blue-500 rounded-l-lg px-4 py-2 mx-0 outline-none focus:shadow-outline">
+                        All
+                    </button>
+                    <button @click="filterMarkersUsingGender('Male')"
+                            class="bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-blue-500  px-4 py-2 mx-0 outline-none focus:shadow-outline">
+                        Male
+                    </button>
+                    <button @click="filterMarkersUsingGender('Female')"
+                            class="bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-l-0 border-blue-500 rounded-r-lg px-4 py-2 mx-0 outline-none focus:shadow-outline">
+                        Female
+                    </button>
+                </div>
+
+                <label class="block mt-4">
+                    <span class="text-gray-700">Within 2000km of</span>
+                    <select @change="calculateDistantRecords" v-model="selectedCity" class="form-select mt-1 block w-full">
+                        <option value="none" selected>None</option>
+                        <option v-for="city in cities" :value="city.city">{{ city.city.toLocaleUpperCase() }}</option>
+                    </select>
+                </label>
             </div>
 
             <div id="map" style="position: initial; width: 100%; height: 480px">
@@ -37,19 +58,24 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         ID
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         First Name
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Last Name
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Gender
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Lat/Lon
                                     </th>
                                 </tr>
@@ -66,7 +92,8 @@
                                         <div class="text-sm text-gray-900">{{ record.last_name }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        <span
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                           {{ record.gender }}
                                         </span>
                                     </td>
@@ -87,73 +114,92 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                records: '',
-                search: '',
-                map: null,
-                mapCenter: {lat: 0, lng: 0},
-                gender: ''
+export default {
+    data() {
+        return {
+            records: '',
+            search: '',
+            map: null,
+            mapCenter: {lat: 0, lng: 0},
+            gender: '',
+            selectedCity: 'none',
+            selectedCityObj: '',
+            cities: [
+                {
+                    city: 'london',
+                    lat: '51.5285582',
+                    lon: '-0.2416808'
+                },
+                {
+                    city: 'paris',
+                    lat: '48.8588377',
+                    lon: '2.2770203'
+                },
+                {
+                    city: 'kansas',
+                    lat: '39.0915837',
+                    lon: '-94.8559036'
+                }
+            ]
+        }
+    },
+    mounted() {
+        console.log('Maps Component.');
+        this.getRecords();
+        this.initMap();
+    },
+    watch: {
+        search: function (oldValue, newValue) {
+            this.filterRecords(oldValue);
+        }
+    },
+    methods: {
+        initMap() {
+            setTimeout(() => {
+                this.map = new google.maps.Map(document.getElementById('map'), {
+                    center: this.mapCenter,
+                    zoom: 1,
+                    maxZoom: 20,
+                    minZoom: 3,
+                    zoomControl: true
+                })
+
+                this.mapMarkers();
+
+            }, 2000)
+        },
+        getRecords() {
+            axios.get('/api/records')
+                .then(res => {
+                    this.records = res.data;
+                })
+                .catch(err => console.error(err));
+        },
+        filterRecords(value) {
+
+            const filterItems = (arr, query) => {
+                return arr.filter((el) => {
+                    if (el.first_name === undefined) {
+                        return false;
+                    }
+
+                    if (el.first_name.toString().toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+                        el.last_name.toString().toLowerCase().indexOf(query.toLowerCase()) !== -1
+                    ) {
+                        return true;
+                    }
+                })
+            }
+
+            this.records = filterItems(this.records, this.search);
+
+            if (value === '') {
+                this.getRecords();
             }
         },
-        mounted() {
-            console.log('Maps Component.');
-            this.getRecords();
-            this.initMap();
-        },
-        watch: {
-            search: function (oldValue, newValue) {
-                this.filterRecords(oldValue);
-            }
-        },
-        methods: {
-            initMap() {
-                setTimeout(() => {
-                    this.map = new google.maps.Map(document.getElementById('map'), {
-                        center: this.mapCenter,
-                        zoom: 1,
-                        maxZoom: 20,
-                        minZoom: 3,
-                        zoomControl: true
-                    })
-
-                    this.mapMarkers();
-
-                }, 2000)
-            },
-            getRecords() {
-                axios.get('/api/records')
-                    .then(res => {
-                        this.records = res.data;
-                    })
-                    .catch(err => console.error(err));
-            },
-            filterRecords(value) {
-
-                const filterItems = (arr, query) => {
-                    return arr.filter((el) => {
-                        if (el.first_name === undefined) {
-                            return false;
-                        }
-
-                        if (el.first_name.toString().toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-                            el.last_name.toString().toLowerCase().indexOf(query.toLowerCase()) !== -1
-                        ) {
-                            return true;
-                        }
-                    })
-                }
-
-                this.records = filterItems(this.records, this.search);
-
-                if (value === '') {
-                    this.getRecords();
-                }
-            },
-            mapMarkers() {
-                this.records.map((record) => {
-                    let contentString = `
+        mapMarkers() {
+            this.records.map((record) => {
+                let contentString = `
 <div class="max-w-xs">
     <div class="bg-white shadow-xl rounded-lg py-3">
         <div class="p-2">
@@ -177,57 +223,100 @@
 </div>
                         `;
 
-                    const infowindow = new google.maps.InfoWindow({
-                        content: contentString,
-                    });
+                const infowindow = new google.maps.InfoWindow({
+                    content: contentString,
+                });
 
-                    let url = "http://maps.google.com/mapfiles/ms/icons/";
+                let url = "http://maps.google.com/mapfiles/ms/icons/";
 
-                    let color = record.gender === 'Male' ? 'blue' : 'pink';
-                    url += color + "-dot.png";
+                let color = record.gender === 'Male' ? 'blue' : 'pink';
+                url += color + "-dot.png";
 
-                    let marker = new google.maps.Marker({
-                        position: new google.maps.LatLng(record.lat, record.lon),
-                        map: this.map,
-                        icon: {
-                            url: url
-                        }
-                    });
+                let marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(record.lat, record.lon),
+                    map: this.map,
+                    icon: {
+                        url: url
+                    }
+                });
 
-                    marker.addListener("click", () => {
-                        infowindow.open(this.map, marker);
-                    });
-                })
+                marker.addListener("click", () => {
+                    infowindow.open(this.map, marker);
+                });
+            })
 
-            },
-            filterMarkersUsingGender(gender) {
+        },
+        filterMarkersUsingGender(gender) {
 
-                setTimeout(() => this.getRecords(), 3000);
+            setTimeout(() => this.getRecords(), 3000);
 
-                if (gender === '') {
-                    this.initMap();
-                    return true;
-                }
-
-                this.gender = gender;
-
-                let filterItems = (arr) => {
-                    return arr.filter((el) => {
-                        if (el.first_name === undefined) {
-                            return false;
-                        }
-
-                        if (el.gender.toString() === this.gender) {
-                            return true;
-                        }
-                    })
-                }
-
-                this.records = filterItems(this.records, this.search);
-                console.warn(this.records);
+            if (gender === '') {
                 this.initMap();
-
+                return true;
             }
+
+            this.gender = gender;
+
+            let filterItems = (arr) => {
+                return arr.filter((el) => {
+                    if (el.first_name === undefined) {
+                        return false;
+                    }
+
+                    if (el.gender.toString() === this.gender) {
+                        return true;
+                    }
+                })
+            }
+
+            this.records = filterItems(this.records, this.search);
+            this.initMap();
+
+        },
+        calculateDistantRecords() {
+            setTimeout(() => this.getRecords(), 3000);
+
+            if (this.selectedCity === 'none'){
+                this.initMap();
+                return true;
+            }
+
+            this.selectedCityObj = this.cities.filter((cityItem) => {
+                return cityItem.city === this.selectedCity;
+            })
+
+            const filterItems = (arr) => {
+                return arr.filter((el) => {
+                    if (el.first_name === undefined) {
+                        return false;
+                    }
+
+                    let p1 = new google.maps.LatLng(this.selectedCityObj[0].lat,this.selectedCityObj[0].lon);
+                    let p2 = new google.maps.LatLng(el.lat,el.lon);
+
+                    let rad = function(x) {
+                        return x * Math.PI / 180;
+                    };
+
+                    let R = 6378137;
+                    let dLat = rad(p2.lat() - p1.lat());
+                    let dLong = rad(p2.lng() - p1.lng());
+                    let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                        Math.cos(rad(p1.lat())) * Math.cos(rad(p2.lat())) *
+                        Math.sin(dLong / 2) * Math.sin(dLong / 2);
+                    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                    let distanceInMeters = R * c;
+
+                    if (distanceInMeters/1000 < 2000) {
+                        return true;
+                    }
+                })
+            }
+
+            this.records = filterItems(this.records, this.search);
+
+            this.initMap();
         }
     }
+}
 </script>

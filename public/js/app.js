@@ -2029,6 +2029,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2039,7 +2066,22 @@ __webpack_require__.r(__webpack_exports__);
         lat: 0,
         lng: 0
       },
-      gender: ''
+      gender: '',
+      selectedCity: 'none',
+      selectedCityObj: '',
+      cities: [{
+        city: 'london',
+        lat: '51.5285582',
+        lon: '-0.2416808'
+      }, {
+        city: 'paris',
+        lat: '48.8588377',
+        lon: '2.2770203'
+      }, {
+        city: 'kansas',
+        lat: '39.0915837',
+        lon: '-94.8559036'
+      }]
     };
   },
   mounted: function mounted() {
@@ -2146,7 +2188,51 @@ __webpack_require__.r(__webpack_exports__);
       };
 
       this.records = filterItems(this.records, this.search);
-      console.warn(this.records);
+      this.initMap();
+    },
+    calculateDistantRecords: function calculateDistantRecords() {
+      var _this5 = this;
+
+      setTimeout(function () {
+        return _this5.getRecords();
+      }, 3000);
+
+      if (this.selectedCity === 'none') {
+        this.initMap();
+        return true;
+      }
+
+      this.selectedCityObj = this.cities.filter(function (cityItem) {
+        return cityItem.city === _this5.selectedCity;
+      });
+
+      var filterItems = function filterItems(arr) {
+        return arr.filter(function (el) {
+          if (el.first_name === undefined) {
+            return false;
+          }
+
+          var p1 = new google.maps.LatLng(_this5.selectedCityObj[0].lat, _this5.selectedCityObj[0].lon);
+          var p2 = new google.maps.LatLng(el.lat, el.lon);
+
+          var rad = function rad(x) {
+            return x * Math.PI / 180;
+          };
+
+          var R = 6378137;
+          var dLat = rad(p2.lat() - p1.lat());
+          var dLong = rad(p2.lng() - p1.lng());
+          var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(p1.lat())) * Math.cos(rad(p2.lat())) * Math.sin(dLong / 2) * Math.sin(dLong / 2);
+          var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          var distanceInMeters = R * c;
+
+          if (distanceInMeters / 1000 < 2000) {
+            return true;
+          }
+        });
+      };
+
+      this.records = filterItems(this.records, this.search);
       this.initMap();
     }
   }
@@ -37929,56 +38015,109 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "flex justify-center rounded-lg text-lg py-4",
-          attrs: { role: "group" }
-        },
-        [
-          _c(
-            "button",
-            {
-              staticClass:
-                "bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-r-0 border-blue-500 rounded-l-lg px-4 py-2 mx-0 outline-none focus:shadow-outline",
-              on: {
-                click: function($event) {
-                  return _vm.filterMarkersUsingGender("")
+      _c("div", { staticClass: "flex space-x-5" }, [
+        _c(
+          "div",
+          {
+            staticClass: "flex justify-center rounded-lg text-lg py-4",
+            attrs: { role: "group" }
+          },
+          [
+            _c(
+              "button",
+              {
+                staticClass:
+                  "bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-r-0 border-blue-500 rounded-l-lg px-4 py-2 mx-0 outline-none focus:shadow-outline",
+                on: {
+                  click: function($event) {
+                    return _vm.filterMarkersUsingGender("")
+                  }
                 }
-              }
-            },
-            [_vm._v("All")]
-          ),
+              },
+              [_vm._v("\n                    All\n                ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass:
+                  "bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-blue-500  px-4 py-2 mx-0 outline-none focus:shadow-outline",
+                on: {
+                  click: function($event) {
+                    return _vm.filterMarkersUsingGender("Male")
+                  }
+                }
+              },
+              [_vm._v("\n                    Male\n                ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass:
+                  "bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-l-0 border-blue-500 rounded-r-lg px-4 py-2 mx-0 outline-none focus:shadow-outline",
+                on: {
+                  click: function($event) {
+                    return _vm.filterMarkersUsingGender("Female")
+                  }
+                }
+              },
+              [_vm._v("\n                    Female\n                ")]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c("label", { staticClass: "block mt-4" }, [
+          _c("span", { staticClass: "text-gray-700" }, [
+            _vm._v("Within 2000km of")
+          ]),
           _vm._v(" "),
           _c(
-            "button",
+            "select",
             {
-              staticClass:
-                "bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-blue-500  px-4 py-2 mx-0 outline-none focus:shadow-outline",
-              on: {
-                click: function($event) {
-                  return _vm.filterMarkersUsingGender("Male")
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.selectedCity,
+                  expression: "selectedCity"
                 }
+              ],
+              staticClass: "form-select mt-1 block w-full",
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.selectedCity = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  _vm.calculateDistantRecords
+                ]
               }
             },
-            [_vm._v("Male")]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass:
-                "bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-l-0 border-blue-500 rounded-r-lg px-4 py-2 mx-0 outline-none focus:shadow-outline",
-              on: {
-                click: function($event) {
-                  return _vm.filterMarkersUsingGender("Female")
-                }
-              }
-            },
-            [_vm._v("Female")]
+            [
+              _c("option", { attrs: { value: "none", selected: "" } }, [
+                _vm._v("None")
+              ]),
+              _vm._v(" "),
+              _vm._l(_vm.cities, function(city) {
+                return _c("option", { domProps: { value: city.city } }, [
+                  _vm._v(_vm._s(city.city.toLocaleUpperCase()))
+                ])
+              })
+            ],
+            2
           )
-        ]
-      ),
+        ])
+      ]),
       _vm._v(" "),
       _c("div", {
         staticStyle: { position: "initial", width: "100%", height: "480px" },
