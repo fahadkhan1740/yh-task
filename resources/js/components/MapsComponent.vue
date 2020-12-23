@@ -12,6 +12,12 @@
                 </div>
             </div>
 
+            <div class="flex justify-center rounded-lg text-lg py-4" role="group">
+                <button @click="filterMarkersUsingGender('')" class="bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-r-0 border-blue-500 rounded-l-lg px-4 py-2 mx-0 outline-none focus:shadow-outline">All</button>
+                <button @click="filterMarkersUsingGender('Male')" class="bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-blue-500  px-4 py-2 mx-0 outline-none focus:shadow-outline">Male</button>
+                <button @click="filterMarkersUsingGender('Female')" class="bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-l-0 border-blue-500 rounded-r-lg px-4 py-2 mx-0 outline-none focus:shadow-outline">Female</button>
+            </div>
+
             <div id="map" style="position: initial; width: 100%; height: 480px">
 
             </div>
@@ -87,7 +93,8 @@
                 records: '',
                 search: '',
                 map: null,
-                mapCenter: {lat: 0, lng: 0}
+                mapCenter: {lat: 0, lng: 0},
+                gender: ''
             }
         },
         mounted() {
@@ -191,6 +198,34 @@
                         infowindow.open(this.map, marker);
                     });
                 })
+
+            },
+            filterMarkersUsingGender(gender) {
+
+                setTimeout(() => this.getRecords(), 3000);
+
+                if (gender === '') {
+                    this.initMap();
+                    return true;
+                }
+
+                this.gender = gender;
+
+                let filterItems = (arr) => {
+                    return arr.filter((el) => {
+                        if (el.first_name === undefined) {
+                            return false;
+                        }
+
+                        if (el.gender.toString() === this.gender) {
+                            return true;
+                        }
+                    })
+                }
+
+                this.records = filterItems(this.records, this.search);
+                console.warn(this.records);
+                this.initMap();
 
             }
         }

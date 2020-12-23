@@ -2023,6 +2023,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2032,7 +2038,8 @@ __webpack_require__.r(__webpack_exports__);
       mapCenter: {
         lat: 0,
         lng: 0
-      }
+      },
+      gender: ''
     };
   },
   mounted: function mounted() {
@@ -2111,6 +2118,36 @@ __webpack_require__.r(__webpack_exports__);
           infowindow.open(_this3.map, marker);
         });
       });
+    },
+    filterMarkersUsingGender: function filterMarkersUsingGender(gender) {
+      var _this4 = this;
+
+      setTimeout(function () {
+        return _this4.getRecords();
+      }, 3000);
+
+      if (gender === '') {
+        this.initMap();
+        return true;
+      }
+
+      this.gender = gender;
+
+      var filterItems = function filterItems(arr) {
+        return arr.filter(function (el) {
+          if (el.first_name === undefined) {
+            return false;
+          }
+
+          if (el.gender.toString() === _this4.gender) {
+            return true;
+          }
+        });
+      };
+
+      this.records = filterItems(this.records, this.search);
+      console.warn(this.records);
+      this.initMap();
     }
   }
 });
@@ -37891,6 +37928,57 @@ var render = function() {
           ])
         ])
       ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "flex justify-center rounded-lg text-lg py-4",
+          attrs: { role: "group" }
+        },
+        [
+          _c(
+            "button",
+            {
+              staticClass:
+                "bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-r-0 border-blue-500 rounded-l-lg px-4 py-2 mx-0 outline-none focus:shadow-outline",
+              on: {
+                click: function($event) {
+                  return _vm.filterMarkersUsingGender("")
+                }
+              }
+            },
+            [_vm._v("All")]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass:
+                "bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-blue-500  px-4 py-2 mx-0 outline-none focus:shadow-outline",
+              on: {
+                click: function($event) {
+                  return _vm.filterMarkersUsingGender("Male")
+                }
+              }
+            },
+            [_vm._v("Male")]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass:
+                "bg-white text-blue-500 hover:bg-blue-500 hover:text-white border border-l-0 border-blue-500 rounded-r-lg px-4 py-2 mx-0 outline-none focus:shadow-outline",
+              on: {
+                click: function($event) {
+                  return _vm.filterMarkersUsingGender("Female")
+                }
+              }
+            },
+            [_vm._v("Female")]
+          )
+        ]
+      ),
       _vm._v(" "),
       _c("div", {
         staticStyle: { position: "initial", width: "100%", height: "480px" },
