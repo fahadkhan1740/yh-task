@@ -2097,9 +2097,15 @@ __webpack_require__.r(__webpack_exports__);
         var infowindow = new google.maps.InfoWindow({
           content: contentString
         });
+        var url = "http://maps.google.com/mapfiles/ms/icons/";
+        var color = record.gender === 'Male' ? 'blue' : 'pink';
+        url += color + "-dot.png";
         var marker = new google.maps.Marker({
           position: new google.maps.LatLng(record.lat, record.lon),
-          map: _this3.map
+          map: _this3.map,
+          icon: {
+            url: url
+          }
         });
         marker.addListener("click", function () {
           infowindow.open(_this3.map, marker);

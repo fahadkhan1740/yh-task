@@ -174,9 +174,17 @@
                         content: contentString,
                     });
 
+                    let url = "http://maps.google.com/mapfiles/ms/icons/";
+
+                    let color = record.gender === 'Male' ? 'blue' : 'pink';
+                    url += color + "-dot.png";
+
                     let marker = new google.maps.Marker({
                         position: new google.maps.LatLng(record.lat, record.lon),
-                        map: this.map
+                        map: this.map,
+                        icon: {
+                            url: url
+                        }
                     });
 
                     marker.addListener("click", () => {
