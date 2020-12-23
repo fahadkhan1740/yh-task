@@ -111,13 +111,7 @@
                         zoomControl: true
                     })
 
-                    this.records.map((record) => {
-                        let marker = new google.maps.Marker({
-                            position: new google.maps.LatLng(record.lat, record.lon),
-                            map: this.map
-                        });
-                    })
-
+                    this.mapMarkers();
 
                 }, 2000)
             },
@@ -149,6 +143,46 @@
                 if (value === '') {
                     this.getRecords();
                 }
+            },
+            mapMarkers() {
+                this.records.map((record) => {
+                    let contentString = `
+<div class="max-w-xs">
+    <div class="bg-white shadow-xl rounded-lg py-3">
+        <div class="p-2">
+            <h3 class="text-center text-xl text-gray-900 font-medium leading-8">${record.first_name} ${record.last_name}</h3>
+            <table class="text-xs my-3">
+                <tbody><tr>
+                    <td class="px-2 py-2 text-gray-500 font-semibold">Gender</td>
+                    <td class="px-2 py-2">${record.gender}</td>
+                </tr>
+                <tr>
+                    <td class="px-2 py-2 text-gray-500 font-semibold">Latitude</td>
+                    <td class="px-2 py-2">${record.lat}</td>
+                </tr>
+                <tr>
+                    <td class="px-2 py-2 text-gray-500 font-semibold">Longitude</td>
+                    <td class="px-2 py-2">${record.lon}</td>
+                </tr>
+            </tbody></table>
+        </div>
+    </div>
+</div>
+                        `;
+
+                    const infowindow = new google.maps.InfoWindow({
+                        content: contentString,
+                    });
+
+                    let marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(record.lat, record.lon),
+                        map: this.map
+                    });
+
+                    marker.addListener("click", () => {
+                        infowindow.open(this.map, marker);
+                    });
+                })
 
             }
         }

@@ -2058,12 +2058,7 @@ __webpack_require__.r(__webpack_exports__);
           zoomControl: true
         });
 
-        _this.records.map(function (record) {
-          var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(record.lat, record.lon),
-            map: _this.map
-          });
-        });
+        _this.mapMarkers();
       }, 2000);
     },
     getRecords: function getRecords() {
@@ -2093,6 +2088,23 @@ __webpack_require__.r(__webpack_exports__);
       if (value === '') {
         this.getRecords();
       }
+    },
+    mapMarkers: function mapMarkers() {
+      var _this3 = this;
+
+      this.records.map(function (record) {
+        var contentString = "\n<div class=\"max-w-xs\">\n    <div class=\"bg-white shadow-xl rounded-lg py-3\">\n        <div class=\"p-2\">\n            <h3 class=\"text-center text-xl text-gray-900 font-medium leading-8\">".concat(record.first_name, " ").concat(record.last_name, "</h3>\n            <table class=\"text-xs my-3\">\n                <tbody><tr>\n                    <td class=\"px-2 py-2 text-gray-500 font-semibold\">Gender</td>\n                    <td class=\"px-2 py-2\">").concat(record.gender, "</td>\n                </tr>\n                <tr>\n                    <td class=\"px-2 py-2 text-gray-500 font-semibold\">Latitude</td>\n                    <td class=\"px-2 py-2\">").concat(record.lat, "</td>\n                </tr>\n                <tr>\n                    <td class=\"px-2 py-2 text-gray-500 font-semibold\">Longitude</td>\n                    <td class=\"px-2 py-2\">").concat(record.lon, "</td>\n                </tr>\n            </tbody></table>\n        </div>\n    </div>\n</div>\n                        ");
+        var infowindow = new google.maps.InfoWindow({
+          content: contentString
+        });
+        var marker = new google.maps.Marker({
+          position: new google.maps.LatLng(record.lat, record.lon),
+          map: _this3.map
+        });
+        marker.addListener("click", function () {
+          infowindow.open(_this3.map, marker);
+        });
+      });
     }
   }
 });
