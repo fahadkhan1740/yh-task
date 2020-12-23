@@ -87,7 +87,7 @@
                 records: '',
                 search: '',
                 map: null,
-                mapCenter: {lat: 27.948308, lng: 109.599191}
+                mapCenter: {lat: 0, lng: 0}
             }
         },
         mounted() {
@@ -105,7 +105,7 @@
                 setTimeout(() => {
                     this.map = new google.maps.Map(document.getElementById('map'), {
                         center: this.mapCenter,
-                        zoom: 15,
+                        zoom: 1,
                         maxZoom: 20,
                         minZoom: 3,
                         zoomControl: true
